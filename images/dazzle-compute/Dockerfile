@@ -1,5 +1,5 @@
 # Base image
-FROM python:3.8
+FROM python:3.9
 
 # Set the working directory in the container
 WORKDIR /app
@@ -15,6 +15,7 @@ COPY app .
 
 EXPOSE 8000
 VOLUME /app/data
+VOLUME /.dizzy
 
 # Run the server application
 CMD ["python", "compute.py"]

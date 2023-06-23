@@ -16,9 +16,13 @@ services:
     build:
       context: ./images/dazzle-compute
     image: dazzle-compute
+    environment:
+      - DIZZY_DATA_ROOT=/.dizzy
     volumes:
       # Volume mapping for persisting modified files
       - ./images/dazzle-compute/data:/app/data
+      # Volume mapping for persisting the Dizzy data
+      - ./images/dazzle-compute/.dizzy:/app/.dizzy
     networks:
       - dazzle-network
 
