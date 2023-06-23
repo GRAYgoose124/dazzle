@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  dazzle-web:
+    build:
+      context: ./images/dazzle-web
+    image: dazzle-web
+    volumes:
+      - ./images/dazzle-web/data:/app/data
+    networks:
+      - dazzle-network
+    ports:
+      - 8000:8000 # Publish container port 8000 to host port 8000
+
+  dazzle-compute:
+    build:
+      context: ./images/dazzle-compute
+    image: dazzle-compute
+    volumes:
+      # Volume mapping for persisting modified files
+      - ./images/dazzle-compute/data:/app/data
+    networks:
+      - dazzle-network
+
+networks:
+  dazzle-network:
+    driver: bridge
