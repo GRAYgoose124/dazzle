@@ -1,31 +1,32 @@
 version: '3.8'
 
 services:
-  dazzle-web:
+  web:
     build:
-      context: ./images/dazzle-web
-    image: dazzle-web
+      context: ./images/web
+    image: web
+    env_file:
+      - ./images/web/.env
     volumes:
-      - ./images/dazzle-web/data:/app/data
+      - ./images/web/data:/app/data
     networks:
-      - dazzle-network
+      - rpc-net
     ports:
-      - 8000:8000 # Publish container port 8000 to host port 8000
+      - 8000:8000
+    command: [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
 
-  dazzle-compute:
+  compute:
     build:
-      context: ./images/dazzle-compute
-    image: dazzle-compute
-    environment:
-      - DIZZY_DATA_ROOT=/.dizzy
+      context: ./images/compute
+    image: compute
+    env_file:
+      - ./images/compute/.env
     volumes:
-      # Volume mapping for persisting modified files
-      - ./images/dazzle-compute/data:/app/data
-      # Volume mapping for persisting the Dizzy data
-      - ./images/dazzle-compute/.dizzy:/app/.dizzy
+      - ./images/compute/data:/app/data
     networks:
-      - dazzle-network
+      - rpc-net
+    command: [ "python", "compute.py" ]
 
 networks:
-  dazzle-network:
+  rpc-net:
     driver: bridge
