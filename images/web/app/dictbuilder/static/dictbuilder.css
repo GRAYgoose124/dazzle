@@ -73,15 +73,14 @@ button[type="submit"] {
 
 .footer {
     margin-top: 20px;
-    text-align: right;
 }
 
-.footer a {
+a {
     color: #fff;
     text-decoration: none;
 }
 
-.footer a:hover {
+a:hover {
     text-decoration: underline;
     color: #bada55;
     /* Light green accent color for clicked hyperlink */

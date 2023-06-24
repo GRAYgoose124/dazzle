@@ -4,14 +4,14 @@
 
 <head>
     <title>Dictionary Builder</title>
-    <link rel="stylesheet" href="{% static 'dict_builder.css' %}">
+    <link rel="stylesheet" href="{% static 'dictbuilder.css' %}">
 </head>
 
 <body>
     <h1>Dizzy Requests (Dictionary Builder)</h1>
     <div class="container">
         <div class="table-container">
-            <form method="post" action="{% url 'dict_builder' %}">
+            <form method="post" action="{% url 'dictbuilder' %}">
                 {% csrf_token %}
 
                 <table>
@@ -68,7 +68,7 @@
     </div>
 
     <footer>
-        <a href="{% url 'second_page' %}">Go to Second Page</a>
+        <a href="{% url 'webcli' %}">Go to Second Page</a>
     </footer>
 </body>
 

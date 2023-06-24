@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from dizzy_client import dizzy_client as client
+from django.http import JsonResponse
+from django.views import View
+import inspect
 
 default_dict_data = {
     "entity": "einz",
@@ -9,7 +12,7 @@ default_dict_data = {
 }
 
 
-def dict_builder(request):
+def dictbuilder(request):
     dict_data = {
         "entity": "",
         "workflow": "",
@@ -66,14 +69,13 @@ def dict_builder(request):
 
     return render(
         request,
-        "dict_builder.html",
+        "dictbuilder.html",
         {"dict_data": dict_data, "dizzy": response},
     )
 
 
-from django.http import JsonResponse
-from django.views import View
-import inspect
+def webcli(request):
+    return render(request, "webcli.html")
 
 
 class DynamicArgsView(View):
@@ -106,7 +108,3 @@ class DynamicArgsView(View):
         # response = function(**func_args)
 
         return JsonResponse({"response": argspec.args})
-
-
-def second_page(request):
-    return render(request, "second_page.html")

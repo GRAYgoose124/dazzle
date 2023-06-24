@@ -5,7 +5,6 @@ services:
   web:
     build:
       context: ./images/web
-    image: web
     env_file: .env
     volumes:
       - './images/web/app:/app:ro' # Should be dev only (and maybe move django db to data)
@@ -18,7 +17,6 @@ services:
   compute:
     build:
       context: ./images/compute
-    image: compute
     env_file: .env
     volumes:
       - './images/compute/app:/app:ro' # Should be dev only
