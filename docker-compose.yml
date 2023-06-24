@@ -8,7 +8,8 @@ services:
     image: web
     env_file: .env
     volumes:
-      - ./images/web/data:/app/data
+      - './images/web/app:/app' # Should be dev only (and maybe move django db to data)
+      - './images/web/data:/data'
     networks:
       - rpc-net
     ports:
@@ -20,7 +21,8 @@ services:
     image: compute
     env_file: .env
     volumes:
-      - ./images/compute/data:/app/data
+      - './images/compute/app:/app' # Should be dev only
+      - './images/compute/data:/data'
     networks:
       - rpc-net
 

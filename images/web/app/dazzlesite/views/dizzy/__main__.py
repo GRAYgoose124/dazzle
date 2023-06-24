@@ -5,7 +5,9 @@ import zmq
 import json
 
 # Dynamic import of dizzy_client.py - os.getenv("DIZZY_CLIENT_MODULE")?
-client = importlib.import_module("dizzy_client").client
+# client = importlib.import_module("dizzy_client").client
+
+from dizzy_client import dizzy_client as client
 
 
 def request(request):
