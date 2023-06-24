@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from dazzlesite.views import dizzy
-from dict_builder.views import dict_builder, second_page
+from dict_builder.views import dict_builder, second_page, DynamicArgsView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -27,5 +27,10 @@ urlpatterns = [
     path("dizzy/", dizzy.request, name="dizzy"),
     # dictbuilder app
     path("dict-builder/", dict_builder, name="dict_builder"),
+    path(
+        "dynamic/<str:function_namespace>/",
+        DynamicArgsView.as_view(),
+        name="dynamic_args",
+    ),
     path("dict-builder/second/", second_page, name="second_page"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
