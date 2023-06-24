@@ -9,5 +9,4 @@ jobs:
         run: docker-compose up -d
       - name: Test
         run: |
-          response=$(curl -s --retry 10 --retry-connrefused "http://web:8000/dizzy/?entity=einz&workflow=einzy")
-          echo "$response" | jq empty > /dev/null || echo "Response is not valid JSON"
+          curl -s "localhost:8000/dizzy/?entity=einz&workflow=einzy" | sed "s/'/\"/g" | jq -e
