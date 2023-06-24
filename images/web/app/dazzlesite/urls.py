@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.urls import include, path
 
 from dazzlesite.views import dizzy
+from dict_builder.views import dict_builder
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     # simple call to dizzy-request.py
     path("dizzy/", dizzy.request, name="dizzy"),
+    path("dict-builder/", dict_builder, name="dict_builder"),
 ]
