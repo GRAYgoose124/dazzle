@@ -4,11 +4,11 @@
 
 ## Install and Run
 
-    docker-compose up
+    docker-compose up [-d]
 
 Then in your browser:
 
-    http://localhost:8000?entity=einz&workflow=einzy
+    http://localhost?entity=einz&workflow=einzy
 
 Check images/compute/data/.dizzy for project-specific dizzy files.
 

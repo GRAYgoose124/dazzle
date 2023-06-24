@@ -12,7 +12,7 @@ services:
     networks:
       - rpc-net
     ports:
-      - 8000:8000
+      - 80:8000
 
   compute:
     build:

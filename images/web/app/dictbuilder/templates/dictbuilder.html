@@ -1,75 +1,64 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
+{% extends 'navibase.html' %}
 
-<head>
-    <title>Dictionary Builder</title>
-    <link rel="stylesheet" href="{% static 'dictbuilder.css' %}">
-</head>
+{% block title %}Web CLI Interface{% endblock %}
 
-<body>
-    <h1>Dizzy Requests (Dictionary Builder)</h1>
-    <div class="container">
-        <div class="table-container">
-            <form method="post" action="{% url 'dictbuilder' %}">
-                {% csrf_token %}
+{% block content %}
+<h1>Dizzy Requests (Dictionary Builder)</h1>
+<div class="container">
+    <div class="table-container">
+        <form method="post" action="{% url 'dictbuilder' %}">
+            {% csrf_token %}
 
-                <table>
-                    <tr>
-                        <th>Key</th>
-                        <th>Value</th>
-                    </tr>
-                    {% for key, value in dict_data.items %}
-                    <tr>
-                        <td>{{ key }}</td>
-                        <td><input type="text" name="{{ key }}" value="{{ value }}"></td>
-                    </tr>
-                    {% endfor %}
-                </table>
+            <table>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+                {% for key, value in dict_data.items %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td><input type="text" name="{{ key }}" value="{{ value }}"></td>
+                </tr>
+                {% endfor %}
+            </table>
 
-                <button type="submit" name="Update" value="true">Update</button>
-                <button type="submit" name="Submit" value="true">Submit</button>
+            <button type="submit" name="Update" value="true">Update</button>
+            <button type="submit" name="Submit" value="true">Submit</button>
 
-                <div class="button-group">
-                    <button type="submit" name="ChangeKeys" value="entity_workflow">Entity/Workflow</button>
-                    <button type="submit" name="ChangeKeys" value="task_service">Task/Service</button>
-                </div>
-            </form>
-        </div>
-
-        {% if dizzy %}
-        <div class="response-container">
-            <div class="dizzy-stats">
-                <h2>Dizzy Response</h2>
-                <ul>
-                    {% for key, value in dizzy.items %}
-                    <li><strong>{{ key }}:</strong> {{ value }}</li>
-                    {% endfor %}
-                </ul>
+            <div class="button-group">
+                <button type="submit" name="ChangeKeys" value="entity_workflow">Entity/Workflow</button>
+                <button type="submit" name="ChangeKeys" value="task_service">Task/Service</button>
             </div>
-        </div>
-        {% endif %}
+        </form>
     </div>
 
-    <!-- Additional row -->
-    <div class="container">
-        <div class="table-container">
-            Content for the new table-container
-        </div>
-
-        <div class="response-container">
-            Content for the new response-container
+    {% if dizzy %}
+    <div class="response-container">
+        <div class="dizzy-stats">
+            <h2>Dizzy Response</h2>
+            <ul>
+                {% for key, value in dizzy.items %}
+                <li><strong>{{ key }}:</strong> {{ value }}</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
+    {% endif %}
+</div>
 
-    <div class="text-editor">
-        <!-- Your text editor HTML code goes here -->
-
+<!-- Additional row -->
+<div class="container">
+    <div class="table-container">
+        Content for the new table-container
     </div>
 
-    <footer>
-        <a href="{% url 'webcli' %}">Go to Second Page</a>
-    </footer>
-</body>
+    <div class="response-container">
+        Content for the new response-container
+    </div>
+</div>
 
-</html>
+<div class="text-editor">
+    <!-- Your text editor HTML code goes here -->
+
+</div>
+{% endblock %}

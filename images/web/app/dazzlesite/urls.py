@@ -17,11 +17,13 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 
 from dazzlesite.views import dizzy
 from dictbuilder.views import dictbuilder, webcli, DynamicArgsView
 
 urlpatterns = [
+    path("favicon.ico", RedirectView.as_view(url="static/favicon.ico")),
     path("admin/", admin.site.urls),
     # simple call to dizzy-request.py
     path("dizzy/", dizzy.request, name="dizzy"),
