@@ -7,4 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # In production we want to remove the volumes and instead:
 # COPY ./app .
 
+# unlikely to ever change
+ENV DIZZY_DATA_ROOT="/data/.dizzy"
+
 CMD [ "python", "dizzy_server.py"]

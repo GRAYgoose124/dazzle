@@ -1,0 +1,6 @@
+entity:
+  name: einz
+  description: Unifying Servitude in One
+  services: ["dos"]
+  workflows:
+    einzy: "EinzyA -> EinzyB"
