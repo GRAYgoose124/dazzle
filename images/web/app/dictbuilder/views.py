@@ -78,6 +78,22 @@ def webcli(request):
     return render(request, "webcli.html")
 
 
+def json_api(request):
+    if request.method == "POST":
+        command = request.POST.get("command", "")
+
+        # Process the command as needed
+        # ...
+
+        # Prepare a response as JSON
+        response_data = {"message": "Command received and processed successfully"}
+
+        return JsonResponse(response_data)
+
+    # Handle other HTTP methods if necessary
+    return JsonResponse({"error": "Invalid request"})
+
+
 class DynamicArgsView(View):
     def get(self, request, *args, **kwargs):
         function_namespace = kwargs.get("function_namespace", None)

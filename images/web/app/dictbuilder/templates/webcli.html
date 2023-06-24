@@ -1,18 +1,25 @@
 {% extends 'navibase.html' %}
 
 {% block title %}Web CLI Interface{% endblock %}
+
 {% block style %}
 <style>
     .cli-container {
-        width: 600px;
+        width: 720px;
         margin: 0 auto;
         background-color: #222;
         padding: 20px;
         border-radius: 5px;
+        overflow: auto;
+        max-height: 260px;
+        /* autoscroll */
+
     }
 
     .cli-input {
         display: flex;
+        margin-top: 10px;
+        /* Adjust margin for better spacing */
     }
 
     .cli-input input {
@@ -34,33 +41,57 @@
 </style>
 {% endblock %}
 
+
 {% block content %}
+<p>Welcome to the Web CLI Interface!</p>
+<p>Enter a command below to get started.</p>
 <div class="cli-container">
-    <div class="cli-output">
-        <p>Welcome to the Web CLI Interface!</p>
-        <p>Type your commands below:</p>
-    </div>
+    <p>Web CLI Interface</p>
     <div class="cli-input">
         <input type="text" id="cli-input" placeholder="Enter your command">
     </div>
+    <div class="cli-output">
+    </div>
 </div>
 
-<script>
-    const cliInput = document.getElementById('cli-input');
-    cliInput.addEventListener('keyup', function (event) {
-        if (event.keyCode === 13) { // Enter key
-            const command = cliInput.value.trim();
-            handleCommand(command);
-            cliInput.value = '';
-        }
-    });
+<form method="post">{% csrf_token %}
+    <script>
+        const cliInput = document.getElementById('cli-input');
+        cliInput.addEventListener('keydown', function (event) {
+            if (event.keyCode === 13) { // Enter key
+                const command = cliInput.value.trim();
+                handleCommand(command);
+                cliInput.value = '';
+            }
+        });
 
-    function handleCommand(command) {
-        // Handle and process the command here
-        const outputContainer = document.querySelector('.cli-output');
-        const outputText = document.createElement('p');
-        outputText.textContent = '> ' + command;
-        outputContainer.appendChild(outputText);
-    }
-</script>
+        function handleCommand(command) {
+            // Handle and process the command here
+            const outputContainer = document.querySelector('.cli-output');
+            const outputText = document.createElement('p');
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;  // Get the CSRF token value from the cookie
+            outputText.textContent = '> ' + command;
+            outputContainer.prepend(outputText);
+
+            const data = {
+                'command': command
+            };
+
+            // Make an AJAX POST request to a Django view
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/json_api', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRFToken', csrftoken);  // Include the CSRF token in the request headers
+            xhr.onload = function () {
+                // Handle the response from the Django view
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    console.log(response);
+                }
+            };
+            xhr.send(JSON.stringify(data));
+            outputContainer.scrollTop = outputContainer.scrollHeight;  // Scroll to the bottom
+        }
+    </script>
+</form>
 {% endblock %}

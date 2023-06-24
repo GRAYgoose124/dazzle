@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
 from dazzlesite.views import dizzy
-from dictbuilder.views import dictbuilder, webcli, DynamicArgsView
+from dictbuilder.views import dictbuilder, webcli, json_api, DynamicArgsView
 
 urlpatterns = [
     path("favicon.ico", RedirectView.as_view(url="static/favicon.ico")),
@@ -30,6 +30,7 @@ urlpatterns = [
     # dictbuilder app
     path("", dictbuilder, name="dictbuilder"),
     path("webcli/", webcli, name="webcli"),
+    path("json_api", json_api, name="json_api"),
     path(
         "dynamic/<str:function_namespace>/",
         DynamicArgsView.as_view(),
