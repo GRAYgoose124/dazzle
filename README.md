@@ -9,6 +9,7 @@
 Then in your browser:
 
 http://localhost:8000/dizzy/?entity=einz&workflow=einzy
+http://localhost:8000/dict-builder?entity=einz&workflow=einzy
 
 Check images/compute/data/.dizzy after first run to see the generated dizzy files. 
 
@@ -17,3 +18,5 @@ TODO: The .dizzy files will be committed in the future as the website is develop
 
 ## TODO:
 - [ ] In production we want to remove the /app volumes and instead COPY the /image/x/appfolders into the container.
+- [ ] automatic python manage.py collectstatic
+- [ ] automatic python manage.py migrate

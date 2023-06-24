@@ -10,7 +10,6 @@
 
 <body>
     <h1>Dizzy Requests (Dictionary Builder)</h1>
-
     <form method="post" action="{% url 'dict_builder' %}">
         {% csrf_token %}
 
@@ -41,6 +40,8 @@
         </ul>
     </div>
     {% endif %}
+
+    <a href="{% url 'second_page' %}">Go to Second Page</a>
 </body>
 
 </html>

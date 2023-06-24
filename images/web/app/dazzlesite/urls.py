@@ -19,11 +19,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from dazzlesite.views import dizzy
-from dict_builder.views import dict_builder
+from dict_builder.views import dict_builder, second_page
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     # simple call to dizzy-request.py
     path("dizzy/", dizzy.request, name="dizzy"),
+    # dictbuilder app
     path("dict-builder/", dict_builder, name="dict_builder"),
+    path("dict-builder/second/", second_page, name="second_page"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

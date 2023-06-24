@@ -25,3 +25,10 @@ def dict_builder(request):
         "dict_builder.html",
         {"dict_data": dict_data, "dizzy": response},
     )
+
+
+from django.shortcuts import render
+
+
+def second_page(request):
+    return render(request, "second_page.html")
