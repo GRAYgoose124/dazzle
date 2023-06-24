@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 400px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 5px;
+}
+
+button[type="submit"] {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.dizzy-stats {
+    margin-top: 30px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+.dizzy-stats h2 {
+    margin-bottom: 10px;
+}
+
+.dizzy-stats ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dizzy-stats li {
+    margin-bottom: 5px;
+}
