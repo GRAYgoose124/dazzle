@@ -42,6 +42,13 @@
             border: 0;
         }
 
+        button[type="submit"]:hover {
+            background-color: #5abf53;
+            /* Darker green accent color on hover */
+            color: #fff;
+            /* White text color on hover */
+        }
+
         button[type="submit"] {
             padding: 8px 16px;
             background-color: #bada55;
@@ -53,6 +60,7 @@
             cursor: pointer;
             margin-right: 10px;
             margin-top: 5px;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .dizzy-stats {
@@ -124,6 +132,30 @@
         .text-editor {
             margin-top: 20px;
             border: 1px solid #bada55;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-evenly;
+            background-color: #444;
+            border: 1px solid #bada55;
+            padding: 10px;
+        }
+
+        .navigation a {
+            display: inline-block;
+            padding: 8px 12px;
+            border: 2px solid #bada55;
+            border-radius: 4px;
+            text-decoration: forestgreen;
+            color: #daba69;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navigation a:hover {
+            background-color: #7aaa29;
+            color: #bada55;
         }
     </style>
     {% block style %}

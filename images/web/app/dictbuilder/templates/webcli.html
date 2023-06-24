@@ -44,7 +44,7 @@
 
 {% block content %}
 <p>Welcome to the Web CLI Interface!</p>
-<p>Enter a command below to get started.</p>
+<p>Enter a command below to get started. Try `request workflow einz einzy`</p>
 <div class="cli-container">
     <p>Web CLI Interface</p>
     <div class="cli-input">
@@ -65,6 +65,13 @@
                 }
                 handleCommand(command);
                 cliInput.value = '';
+            } else if (event.keyCode === 38) { // Up arrow key
+                // get last command from outputContainer.prepend: "> command"
+                const outputContainer = document.querySelector('.cli-output');
+                // make sure to ignore the lines not starting with > as they are output
+                const lastCommand = outputContainer.firstChild.nextSibling.textContent
+
+                cliInput.value = lastCommand.substring(2);
             }
         });
 
