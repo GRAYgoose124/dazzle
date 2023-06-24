@@ -8,7 +8,7 @@
 
 Then in your browser:
 
-    http://localhost?entity=einz&workflow=einzy
+    localhost?entity=einz&workflow=einzy
 
 Check images/compute/data/.dizzy for project-specific dizzy files.
 

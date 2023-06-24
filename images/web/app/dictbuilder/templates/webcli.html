@@ -60,6 +60,9 @@
         cliInput.addEventListener('keydown', function (event) {
             if (event.keyCode === 13) { // Enter key
                 const command = cliInput.value.trim();
+                if (command === '') {
+                    return;
+                }
                 handleCommand(command);
                 cliInput.value = '';
             }
@@ -87,6 +90,9 @@
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
                     console.log(response);
+                    const outputText = document.createElement('p');
+                    outputText.textContent = xhr.responseText;
+                    outputContainer.prepend(outputText);
                 }
             };
             xhr.send(JSON.stringify(data));
