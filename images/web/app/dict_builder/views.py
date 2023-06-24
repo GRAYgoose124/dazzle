@@ -62,11 +62,7 @@ def dict_builder(request):
                 )
 
             if "service" in dict_data and "task" in dict_data:
-                if isinstance(response, dict):
-                    response = {"workflow": response}
-                response["taskserv"] = client.request_task(
-                    dict_data["service"], dict_data["task"]
-                )
+                response = client.request_task(dict_data["service"], dict_data["task"])
 
     return render(
         request,

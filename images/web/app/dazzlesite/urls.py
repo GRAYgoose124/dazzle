@@ -26,7 +26,7 @@ urlpatterns = [
     # simple call to dizzy-request.py
     path("dizzy/", dizzy.request, name="dizzy"),
     # dictbuilder app
-    path("dict-builder/", dict_builder, name="dict_builder"),
+    path("", dict_builder, name="dict_builder"),
     path(
         "dynamic/<str:function_namespace>/",
         DynamicArgsView.as_view(),
