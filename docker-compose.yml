@@ -1,31 +1,28 @@
 version: '3.8'
 
 services:
+
   web:
     build:
       context: ./images/web
     image: web
-    env_file:
-      - ./images/web/.env
+    env_file: .env
     volumes:
       - ./images/web/data:/app/data
     networks:
       - rpc-net
     ports:
       - 8000:8000
-    command: [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
 
   compute:
     build:
       context: ./images/compute
     image: compute
-    env_file:
-      - ./images/compute/.env
+    env_file: .env
     volumes:
       - ./images/compute/data:/app/data
     networks:
       - rpc-net
-    command: [ "python", "compute.py" ]
 
 networks:
   rpc-net:

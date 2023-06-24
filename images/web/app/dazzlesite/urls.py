@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from . import dizzy
+from dazzlesite.views import dizzy
 
 urlpatterns = [
     path("admin/", admin.site.urls),
