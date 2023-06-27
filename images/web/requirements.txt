@@ -1,2 +1,5 @@
 dizzy @ git+https://github.com/GRAYgoose124/dizzy
 django>=4.1.7
+uvicorn>=0.20.0
+gunicorn>=20.1.0
+daphne>=4.0.0
