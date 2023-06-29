@@ -5,7 +5,6 @@
 {% block style %}
 <style>
     .cli-container {
-        width: 720px;
         min-width: none;
         flex: 1;
         margin: 0 auto;
@@ -71,9 +70,12 @@
                 // get last command from outputContainer.prepend: "> command"
                 const outputContainer = document.querySelector('.cli-output');
                 // make sure to ignore the lines not starting with > as they are output
-                const lastCommand = outputContainer.firstChild.nextSibling.textContent
+                var lastCommand = outputContainer.firstChild;
+                while (!lastCommand.textContent.startsWith('>')) {
+                    lastCommand = lastCommand.nextSibling
+                }
 
-                cliInput.value = lastCommand.substring(2);
+                cliInput.value = lastCommand.textContent.substring(2);
             }
         });
 
@@ -91,7 +93,7 @@
 
             // Make an AJAX POST request to a Django view
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/json_api', true);
+            xhr.open('POST', '/json_api/', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.setRequestHeader('X-CSRFToken', csrftoken);  // Include the CSRF token in the request headers
             xhr.onload = function () {
