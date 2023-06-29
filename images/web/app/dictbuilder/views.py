@@ -100,6 +100,19 @@ def json_api(request):
     return JsonResponse({"result": "Invalid request"})
 
 
+def schedule(request):
+    if request.method == "POST":
+        job_name = request.POST.get("jobName")
+        queue = request.POST.getlist("queue[]")
+        # Process the submitted queue data
+        # ...
+
+        # Return a JSON response
+        return JsonResponse({"message": "Queue submitted successfully."})
+
+    return render(request, "schedule.html")
+
+
 class DynamicArgsView(View):
     def get(self, request, *args, **kwargs):
         function_namespace = kwargs.get("function_namespace", None)

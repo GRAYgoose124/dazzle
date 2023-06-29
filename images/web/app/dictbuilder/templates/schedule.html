@@ -1,0 +1,203 @@
+{% extends 'navibase.html' %}
+
+{% block title %}Queue System Interface{% endblock %}
+
+{% block style %}
+<style>
+    .queue-container {
+        width: 720px;
+        min-width: none;
+        flex: 1;
+        margin: 0 auto;
+        background-color: #555;
+        padding: 20px;
+        border-radius: 5px;
+        overflow: auto;
+        max-height: 260px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .queue-item {
+        margin: 10px;
+        padding: 10px;
+        background-color: #222;
+        color: #fff;
+        border-radius: 5px;
+        display: flex;
+        align-items: left;
+        justify-content: left;
+    }
+
+    .queue-buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .queue-buttons button {
+        margin: 5px;
+        padding: 10px 20px;
+    }
+
+    .queue-block {
+        margin-bottom: 40px;
+    }
+
+    .submit-button {
+        display: block;
+        margin-top: 10px;
+    }
+
+    .queue-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .remove-queue {
+        background-color: #ff0000;
+        color: #ffffff;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<p>Welcome to the Queue System Interface!</p>
+<div id="queues-container">
+    <!-- Queues will be added here dynamically -->
+</div>
+<div>
+    <button id="add-queue">Add Queue</button>
+</div>
+
+{% csrf_token %}
+<script>
+    let queues = {};
+    let nextQueueId = 1;
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    document.getElementById('add-queue').addEventListener('click', function () {
+        // Create new queue
+        queues[nextQueueId] = [];
+        addQueueBlock(nextQueueId);
+        nextQueueId++;
+    });
+
+    document.getElementById('queues-container').addEventListener('click', function (event) {
+        if (event.target.tagName.toLowerCase() !== 'button') {
+            return;
+        }
+
+        const queueBlock = event.target.closest('.queue-block');
+        const queueId = parseInt(queueBlock.id.split('-')[2]);
+        const queueContainer = queueBlock.querySelector('.queue-container');
+
+        if (event.target.classList.contains('add-to-queue')) {
+            // Add to queue
+            const newItem = 'Item ' + (queues[queueId].length + 1);
+            queues[queueId].push(newItem);
+        } else if (event.target.classList.contains('remove-from-queue')) {
+            // Remove from queue
+            if (queues[queueId].length > 0) {
+                queues[queueId].shift();
+            }
+        } else if (event.target.classList.contains('submit-button')) {
+            // Submit queue
+            const jobName = window.prompt('Enter a job name');
+            if (jobName) {
+                console.log('Submitted job:', jobName, 'with queue:', queues[queueId]);
+                submitQueue(jobName, queues[queueId]);
+            }
+            queues[queueId] = [];
+        } else if (event.target.classList.contains('remove-queue')) {
+            // Remove queue block
+            delete queues[queueId];
+            queueBlock.remove();
+            return;
+        }
+
+        renderQueue(queueId, queueContainer);
+    });
+
+    function addQueueBlock(queueId) {
+        const queueBlockDiv = document.createElement('div');
+        queueBlockDiv.classList.add('queue-block');
+        queueBlockDiv.id = 'queue-block-' + queueId;
+
+        const queueHeaderDiv = document.createElement('div');
+        queueHeaderDiv.classList.add('queue-header');
+        queueBlockDiv.appendChild(queueHeaderDiv);
+
+        const queueContainerDiv = document.createElement('div');
+        queueContainerDiv.classList.add('queue-container');
+        queueContainerDiv.id = 'queue-container-' + queueId;
+        queueHeaderDiv.appendChild(queueContainerDiv);
+
+        const removeQueueButton = document.createElement('button');
+        removeQueueButton.classList.add('remove-queue');
+        removeQueueButton.textContent = 'X';
+        queueHeaderDiv.appendChild(removeQueueButton);
+
+        const queueButtonsDiv = document.createElement('div');
+        queueButtonsDiv.classList.add('queue-buttons');
+        queueBlockDiv.appendChild(queueButtonsDiv);
+
+        const addToQueueButton = document.createElement('button');
+        addToQueueButton.classList.add('add-to-queue');
+        addToQueueButton.textContent = 'Add to Queue';
+        queueButtonsDiv.appendChild(addToQueueButton);
+
+        const removeFromQueueButton = document.createElement('button');
+        removeFromQueueButton.classList.add('remove-from-queue');
+        removeFromQueueButton.textContent = 'Remove from Queue';
+        queueButtonsDiv.appendChild(removeFromQueueButton);
+
+        const submitButton = document.createElement('button');
+        submitButton.classList.add('submit-button');
+        submitButton.textContent = 'Submit Queue';
+        queueButtonsDiv.appendChild(submitButton);
+
+        document.getElementById('queues-container').appendChild(queueBlockDiv);
+    }
+
+    function renderQueue(queueId, queueContainer) {
+        queueContainer.innerHTML = '';
+        for (let i = 0; i < queues[queueId].length; i++) {
+            const queueItemDiv = document.createElement('div');
+            queueItemDiv.classList.add('queue-item');
+            queueItemDiv.textContent = queues[queueId][i];
+            queueContainer.appendChild(queueItemDiv);
+        }
+    }
+
+    function submitQueue(jobName, queue) {
+        const url = '/json_api/'; // Update with your server-side route
+        const data = {
+            jobName: jobName,
+            queue: queue,
+            csrfmiddlewaretoken: csrftoken
+        };
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+{% endblock %}
