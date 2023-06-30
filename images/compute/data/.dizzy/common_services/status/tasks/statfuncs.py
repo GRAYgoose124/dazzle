@@ -1,4 +1,7 @@
+import logging
 from dizzy import Task
+
+logger = logging.getLogger(__name__)
 
 
 class Task(Task):
@@ -11,11 +14,18 @@ class Task(Task):
 
 
 class Info(Task):
-    """B task"""
+    """Gets info about loaded services."""
 
-    dependencies = ["Task"]
+    requested_actions = ["entity_info", "service_info"]
 
     @staticmethod
     def run(ctx):
-        ctx["Info"] = f"Info about {ctx['Task']}"
-        return f"{ctx['Task']}"
+        try:
+            info = Info.get_action("entity_info")()
+        except Exception as e:
+            logger.error(f"Error getting entity info: {e}")
+            info = {}
+
+        ctx["entity_info"] = info
+
+        return info
