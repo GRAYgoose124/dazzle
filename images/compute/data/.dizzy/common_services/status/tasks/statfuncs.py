@@ -18,14 +18,16 @@ class Info(Task):
 
     requested_actions = ["entity_info", "service_info"]
 
-    @staticmethod
-    def run(ctx):
+    def run(self, ctx):
+        info = {}
         try:
-            info = Info.get_action("entity_info")()
+            logger.debug(f"Trying to get service info from %s", self)
+            info["service"] = f"{self.try_run_action('service_info')}"
+            info["entity"] = f"{self.try_run_action('entity_info')}"
         except Exception as e:
             logger.error(f"Error getting entity info: {e}")
-            info = {}
+            info["error"] = f"{e}"
 
-        ctx["entity_info"] = info
+        ctx[self.__class__.__name__] = info
 
         return info

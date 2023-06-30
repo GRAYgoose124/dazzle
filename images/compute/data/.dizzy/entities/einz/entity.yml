@@ -1,6 +1,7 @@
 entity:
   name: einz
   description: Unifying Servitude in One
-  services: ["dos"]
+  services: ["dos", "status", "project"]
   workflows:
     einzy: "EinzyA -> EinzyB"
+    info: "EinzInfo"
