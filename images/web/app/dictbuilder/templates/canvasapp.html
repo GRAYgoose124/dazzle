@@ -1,0 +1,196 @@
+{% extends 'navibase.html' %}
+
+{% block title %}Node Requester{% endblock %}
+
+{% block content %}
+<style>
+    #canvas {
+        width: 100%;
+        height: 800px;
+        background-color: #111;
+    }
+
+    .node {
+        stroke: #fff;
+        stroke-width: 2px;
+    }
+
+    .link {
+        stroke: #bada55;
+        stroke-width: 2px;
+    }
+
+    .draggable {
+        cursor: move;
+        fill: #bada55;
+    }
+</style>
+<h1>Node Requester</h1>
+<div id="canvas"></div>
+<div style="display: flex; justify-content: center;">
+    <button onclick="addNode()">Add Node</button>
+    <button onclick="removeNode()">Remove Node</button>
+    <button onclick="addLink()">Add Link</button>
+    <button onclick="removeLink()">Remove Link</button>
+    <button onclick="clearCanvas()">Clear Canvas</button>
+    <button onclick="buildRequest()">Send Request</button>
+</div>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+{% csrf_token %}
+<script>
+    var svg = d3.select("#canvas")
+        .append("svg")
+        .attr("width", "100%")
+        .attr("height", "800px");
+
+    var nodes = [
+        { id: 'node1', x: 100, y: 100 },
+        { id: 'node2', x: 300, y: 300 }
+    ];
+
+    var links = [];
+
+    function updateGraph() {
+        svg.selectAll(".link").remove();
+        svg.selectAll(".node").remove();
+
+        var linkElements = svg.append("g")
+            .selectAll("line")
+            .data(links)
+            .enter().append("line")
+            .attr("class", "link")
+            .attr("x1", function (d) { return d.source.x; })
+            .attr("y1", function (d) { return d.source.y; })
+            .attr("x2", function (d) { return d.target.x; })
+            .attr("y2", function (d) { return d.target.y; });
+
+        var nodeElements = svg.append("g")
+            .selectAll("circle")
+            .data(nodes)
+            .enter().append("circle")
+            .attr("class", "node draggable")
+            .attr("r", 50)
+            .attr("cx", function (d) { return d.x; })
+            .attr("cy", function (d) { return d.y; })
+            .on("click", nodeClicked)
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended)
+            );
+
+    }
+
+    updateGraph();
+
+    // An array to store selected nodes
+    var selectedNodes = [];
+    var dragging = false;
+
+    function dragended(d) {
+        dragging = false;
+    }
+
+    function dragstarted(d) {
+        dragging = true;
+        d3.select(this).raise().classed("active", true).style("stroke", "red");
+    }
+
+    function nodeClicked(d) {
+        if (!dragging) {
+            var node = d3.select(this);
+            var index = selectedNodes.indexOf(d);
+            if (index > -1) {
+                selectedNodes.splice(index, 1);
+                node.classed("active", false).style("stroke", "white");
+            } else if (selectedNodes.length < 2) {
+                selectedNodes.push(d);
+                node.classed("active", true).style("stroke", "red");
+            }
+        }
+    }
+
+
+    function addLink() {
+        if (selectedNodes.length !== 2) {
+            alert("Please select two nodes to create a link.");
+            return;
+        }
+
+        links.push({ source: selectedNodes[0], target: selectedNodes[1] });
+        updateGraph();
+        // Clear the selected nodes
+        selectedNodes = [];
+        // Deselect the nodes visually
+        d3.selectAll('.node').classed("active", false).style("stroke", "white");
+    }
+
+    function removeLink() {
+        if (selectedNodes.length !== 2) {
+            alert("Please select two linked nodes to remove the link.");
+            return;
+        }
+
+        links = links.filter(link => !(link.source === selectedNodes[0] && link.target === selectedNodes[1] || link.source === selectedNodes[1] && link.target === selectedNodes[0]));
+        updateGraph();
+        // Clear the selected nodes
+        selectedNodes = [];
+        // Deselect the nodes visually
+        d3.selectAll('.node').classed("active", false).style("stroke", "white");
+    }
+
+    function dragged(d) {
+        d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+        updateGraph();
+    }
+
+    function addNode() {
+        nodes.push({ id: "node" + (nodes.length + 1), x: Math.random() * 500, y: Math.random() * 500 });
+        updateGraph();
+    }
+
+    function removeNode() {
+        if (nodes.length <= 2) {
+            alert("Cannot remove nodes. Minimum two nodes required.");
+            return;
+        }
+
+        nodes.pop();
+        links = links.filter(link => link.source !== nodes[nodes.length] && link.target !== nodes[nodes.length]);
+        updateGraph();
+    }
+
+    function clearCanvas() {
+        nodes = [];
+        links = [];
+        updateGraph();
+    }
+
+    function buildRequest() {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;  // Get the CSRF token value from the cookie
+
+        // json = JSON.stringify(nodes); Doesn't stringify the list properly
+        json = JSON.stringify({ "nodes": nodes, "links": links });
+
+
+        $.ajax({
+            url: "/json_api/",
+            type: "POST",
+            data: json,
+            headers: {
+                "X-CSRFToken": csrftoken,
+                "Content-Type": "application/json"
+            },
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (xhr, textStatus, error) {
+                console.error(`Error occurred during request: ${textStatus}, ${error}`);
+            }
+        });
+    }
+</script>
+{% endblock %}

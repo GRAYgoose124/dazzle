@@ -13,6 +13,10 @@ default_dict_data = {
 }
 
 
+def canvasapp(request):
+    return render(request, "canvasapp.html")
+
+
 def dictbuilder(request):
     dict_data = {
         "entity": "",

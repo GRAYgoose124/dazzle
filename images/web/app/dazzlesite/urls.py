@@ -20,7 +20,14 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
 from dazzlesite.views import dizzy
-from dictbuilder.views import dictbuilder, webcli, json_api, DynamicArgsView, schedule
+from dictbuilder.views import (
+    dictbuilder,
+    webcli,
+    json_api,
+    DynamicArgsView,
+    schedule,
+    canvasapp,
+)
 
 urlpatterns = [
     path("favicon.ico", RedirectView.as_view(url="static/favicon.ico")),
@@ -32,6 +39,7 @@ urlpatterns = [
     path("webcli/", webcli, name="webcli"),
     path("schedule/", schedule, name="schedule"),
     path("json_api/", json_api, name="json_api"),
+    path("canvasapp/", canvasapp, name="canvasapp"),
     path(
         "dynamic/<str:function_namespace>/",
         DynamicArgsView.as_view(),
