@@ -1,2 +1,9 @@
+# Don't forget to set DJANGO_SECRET_KEY in your environment.
+# You can set .env, but you really should just set it in your environment.
+# Ex. `DJANGO_SECRET_KEY=your_secret_key ./run.sh -p`
 web:
+  env:
+  - WEB_PRODUCTION: "True"
+  - DJANGO_SECRET_KEY: "${DJANGO_SECRET_KEY}" 
+  - DIZZY_LOG_LEVEL: "INFO"
   command: gunicorn dazzlesite.asgi:application -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000

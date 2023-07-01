@@ -14,14 +14,24 @@ Here's a temporary [demo](http://piedhyper.space) link. Hoping to dedicate a sub
 
 ## Install and Run
 
-    docker-compose up [-d]
+    ./run.sh -h
+
+    ./run.sh
 
 Then in your browser:
 
-    localhost?entity=einz&workflow=einzy
+    localhost/dizzy?entity=einz&workflow=einzy
+
+Or, to browse the website, simply:
+
+    localhost
 
 Check images/compute/data/.dizzy for project-specific dizzy files.
 
+### Production
+    Set DJDANGO_PRIMARY_HOST
+
+    DJANGO_SECRET_KEY=YOURSECRETKEY ./run -p
 
 ## TODO:
 - [ ] In production we may want to remove the /app volumes and instead COPY the /image/x/appfolders into the container.
