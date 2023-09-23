@@ -34,7 +34,7 @@ primary_host = os.getenv("DJANGO_PRIMARY_HOST", "")
 if len(primary_host) == 0:
     primary_host = "localhost"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [primary_host]
 
 
 # Application definition
