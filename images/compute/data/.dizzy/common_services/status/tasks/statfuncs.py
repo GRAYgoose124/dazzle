@@ -22,8 +22,8 @@ class Info(Task):
         info = {}
         try:
             logger.debug(f"Trying to get service info from %s", self)
-            info["service"] = self.try_run_action("service_info")
-            info["entity"] = self.try_run_action("entity_info")
+            info["service"] = str(self.try_run_action("service_info"))
+            info["entity"] = str(self.try_run_action("entity_info"))
         except Exception as e:
             logger.error(f"Error getting entity info: {e}")
             info["error"] = f"{e}"
