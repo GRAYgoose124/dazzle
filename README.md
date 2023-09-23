@@ -5,18 +5,16 @@
 
 Loosely speaking, one makes a request to a backend library with a custom dizzy wrapper. The web uses a `dizzy.daemon.Client` to substantiate this interaction. `compute/data/.dizzy` holds the information and python code for the custom dizzy protocol. See dizzy itself to learn more about customizing dizzy protocols.
 
-S/N: Dizzy itself is very incomplete. [Zmqer](https://github.com/GRAYgoose124/codespace_play/tree/main/zmqer) is a similar experiment which I may merge in achieving RPC-like behaviour with zmq through dizzy.
-
-## See also 
-
-Here's a temporary [demo](http://piedhyper.space) link. Hoping to dedicate a subdomain to this project soon and get a CI/CD pipeline to production release.
+S/N: Dizzy itself is very incomplete. [Zmqer](https://github.com/GRAYgoose124/zmqueer) is a similar experiment which I may merge in achieving RPC-like behaviour with zmq through dizzy.
 
 
 ## Install and Run
+```bash
+    # If you want to access it from anything other than localhost, set the primary host in:
+    cp .env.template .env
 
-    ./run.sh -h
-
-    ./run.sh
+    ./run.sh [-h]
+```
 
 Then in your browser:
 

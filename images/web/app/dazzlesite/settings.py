@@ -30,11 +30,12 @@ if not SECRET_KEY or DEBUG == False and SECRET_KEY == "changeme":
         "DJANGO_SECRET_KEY environment variable is not set properly! See .env file."
     )
 
-primary_host = os.getenv("DJANGO_PRIMARY_HOST", "")
-if len(primary_host) == 0:
-    primary_host = "localhost"
+primary_host = os.getenv("DJANGO_PRIMARY_HOST", "localhost")
 
 ALLOWED_HOSTS = [primary_host]
+
+if DEBUG and primary_host != "localhost":
+    ALLOWED_HOSTS.append("localhost")
 
 
 # Application definition
