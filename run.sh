@@ -1,15 +1,20 @@
 #!/bin/bash
 
+
 # Variables
 build=false
 production=false
 
 # getopts block
-while getopts ":bpds:rh" opt; do
+while getopts ":bepds:rh" opt; do
   case $opt in
     b)
       echo "Building..."
       build=true
+      ;;
+    e)
+      echo "copying .env.template to .env"
+      cp .env.template .env
       ;;
     p)
       production=true
