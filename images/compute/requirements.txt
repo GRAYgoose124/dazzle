@@ -1,1 +1,1 @@
-dizzy @ git+https://github.com/GRAYgoose124/dizzy@d825bbbafe4b3daa7f227e0599ef332b9d589813
+dizzy @ git+https://github.com/GRAYgoose124/dizzy

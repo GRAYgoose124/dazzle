@@ -3,10 +3,10 @@ import os
 import zmq
 
 
-from dizzy.daemon.client.basic import DizzyClient
+from dizzy.daemon.client.asy import SimpleAsyncClient
 
 
-class CustomDizzyClient(DizzyClient):
+class CustomDizzyClient(SimpleAsyncClient):
     pass
 
 

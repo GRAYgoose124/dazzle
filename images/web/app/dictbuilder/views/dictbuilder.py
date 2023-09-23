@@ -1,3 +1,4 @@
+import asyncio
 from django.shortcuts import render
 from dizzy_client import dizzy_client as client
 
@@ -58,12 +59,13 @@ def dictbuilder(request):
 
         if "Submit" in request.POST:
             if "entity" in dict_data and "workflow" in dict_data:
-                response = client.request_workflow(
+                response = client.sync_request_workflow(
                     dict_data["entity"], dict_data["workflow"]
                 )
-
             if "service" in dict_data and "task" in dict_data:
-                response = client.request_task(dict_data["service"], dict_data["task"])
+                response = client.sync_request_task(
+                    dict_data["service"], dict_data["task"]
+                )
 
     return render(
         request,
