@@ -45,6 +45,7 @@ while getopts ":bepds:rh" opt; do
       echo "Usage: run.sh [-b] [-p] [-d] [-s] [-r] [-h]"
       echo "  -b        build the application"
       echo "  -p        run in production mode"
+      echo "  -e        copy .env.template to .env"
       echo "  -d        run in daemon mode"
       echo "  -s [web]  stop dazzle (or just the web container)"
       echo "  -r        remove the application"
