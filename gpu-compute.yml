@@ -3,7 +3,8 @@ version: '3.9'
 services:
   compute:
     build:
-      dockerfile: Dockerfile.gpu
+      args:
+        USE_GPU: 'true'
     deploy:
       resources:
         reservations:
