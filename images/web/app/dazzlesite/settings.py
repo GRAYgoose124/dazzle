@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "channels",
+    # dazzlesite apps
     "dictbuilder",
 ]
 
@@ -79,8 +80,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "dazzlesite.wsgi.application"
-# ASGI_APPLICATION = "dazzlesite.asgi.application"
+# WSGI_APPLICATION = "dazzlesite.wsgi.application"
+ASGI_APPLICATION = "dazzlesite.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

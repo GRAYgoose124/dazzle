@@ -1,15 +1,10 @@
 #!/bin/bash
 
 
-# Variables
-build=false
-production=false
 
-# getopts block
-while getopts ":bepds:rh" opt; do
+while getopts ":bepdsgrh" opt; do
   case $opt in
     b)
-      echo "Building..."
       build=true
       ;;
     e)
@@ -17,7 +12,18 @@ while getopts ":bepds:rh" opt; do
       cp .env.template .env
       ;;
     p)
-      production=true
+      echo "Running in production mode"
+      production="-f production.yml"
+      ;;
+    g)
+      echo "Running with GPU"
+      # install nvidia-container-toolkit if it is not installed
+      if ! dpkg -s nvidia-container-toolkit >/dev/null 2>&1; then
+        echo "You need to install nvidia-container-toolkit to use GPU:"
+        printf "\nhttps://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html\n\n"
+        exit 1
+      fi
+      gpu="-f gpu-compute.yml"
       ;;
     d)
       echo "Running in daemon mode"
@@ -45,6 +51,7 @@ while getopts ":bepds:rh" opt; do
       echo "Usage: run.sh [-b] [-p] [-d] [-s] [-r] [-h]"
       echo "  -b        build the application"
       echo "  -p        run in production mode"
+      echo "  -g        run with GPU compute"
       echo "  -e        copy .env.template to .env"
       echo "  -d        run in daemon mode"
       echo "  -s [web]  stop dazzle (or just the web container)"
@@ -58,15 +65,11 @@ while getopts ":bepds:rh" opt; do
   esac
 done
 
-# Build the application if requested
+ARGS="-f docker-compose.yml ${production} ${gpu}"
 if [ "$build" = true ]; then
-  docker-compose build --no-cache
+  echo "Building..."
+  docker-compose $ARGS build --no-cache 
 fi
 
-# Run the application
-if [ "$production" = true ]; then
-  echo "Running in production mode"
-  docker-compose -f docker-compose.yml -f production.yml up $daemon
-else
-  docker-compose up $daemon
-fi
+echo "Starting..."
+docker-compose $ARGS up $daemon

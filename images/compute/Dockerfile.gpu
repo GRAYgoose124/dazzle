@@ -1,0 +1,16 @@
+# Use NVIDIA's CUDA base image
+FROM nvidia/cuda:11.4.2-base-ubuntu20.04
+
+WORKDIR /app
+
+# Install Python and other dependencies
+RUN apt-get update && apt-get install -y python3.10 python3-pip
+
+# Copy requirements and install Python packages
+COPY ./requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# Set environment variable (as in your original Dockerfile)
+ENV DIZZY_DATA_ROOT="/data/.dizzy"
+
+CMD [ "python3", "dizzy_server.py"]
