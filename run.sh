@@ -65,11 +65,14 @@ while getopts ":bepdsgrh" opt; do
   esac
 done
 
-ARGS="-f docker-compose.yml ${production} ${gpu}"
+args="-f docker-compose.yml ${production} ${gpu}"
 if [ "$build" = true ]; then
   echo "Building..."
-  docker-compose $ARGS build --no-cache 
+  if [ "$FORCE_NO_CACHE" = true ]; then
+    nocache="--no-cache"
+  fi
+  docker-compose $args build $nocache
 fi
 
 echo "Starting..."
-docker-compose $ARGS up $daemon
+docker-compose $args up $daemon
