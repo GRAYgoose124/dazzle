@@ -18,7 +18,7 @@ services:
     build:
       context: ./images/compute
       args:
-        COMPUTE_EXTRA_BASE: "${COMPUTE_EXTRA_BASE:-python:3.10}"
+        COMPUTE_EXTRA_BASE: "${COMPUTE_EXTRA_BASE}"
     env_file: .env
     volumes:
       - './images/compute/app:/app:ro' # Should be dev only

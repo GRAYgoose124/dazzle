@@ -12,5 +12,5 @@ fi
 # Append or replace BASE_IMAGE value in .env
 #grep -q 'BASE_IMAGE=' .env && sed -i "/BASE_IMAGE=/c\BASE_IMAGE=\"$BASE_IMAGE\"" .env || echo "BASE_IMAGE=$BASE_IMAGE" >> .env
 
-echo "set compute extra base: $COMPUTE_EXTRA_BASE"
+echo "set compute extra base: $1:$COMPUTE_EXTRA_BASE"
 export COMPUTE_EXTRA_BASE

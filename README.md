@@ -16,6 +16,12 @@ S/N: Dizzy itself is very incomplete. [Zmqer](https://github.com/GRAYgoose124/zm
     ./run.sh [-h]
 ```
 
+### Useful vars
+```bash
+FORCE_NO_CACHE=True ./run.sh -b
+SELECTED_EXTRA_BASE=${pytorch:cuda} ./run.sh -b
+```
+
 Then in your browser:
 
     localhost/dizzy?entity=einz&workflow=einzy
@@ -36,3 +42,4 @@ Check images/compute/data/.dizzy for project-specific dizzy files.
 - [ ] automatic python manage.py 
   - [ ] collectstatic
   - [ ] migrate
+- [ ] test `-b`, `-b -g`, `SELECTED_EXTRA_BASE=${pytorch:cuda}` etc.

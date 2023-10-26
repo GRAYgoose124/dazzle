@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # check if we are in the right directory (the directory this script really exists in)
-# first get this scripts actual path then compare
 SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 if [ "$SCRIPT_PATH" != "$(pwd)" ]; then
-  echo "You must run this script from the dazzle directory"
+  echo "You must run this script from the dazzle directory: $SCRIPT_PATH"
   exit 1
 fi
 
@@ -30,7 +29,7 @@ while getopts ":bepdsgrh" opt; do
         printf "\nhttps://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html\n\n"
         exit 1
       fi
-      . bin/set_compute_base.sh cuda
+      SELECTED_EXTRA_BASE=${SELECTED_EXTRA_BASE:-cuda}
       gpu="-f gpu-compute.yml"
       # build_args="--build-arg COMPUTE_EXTRA_BASE=\"$COMPUTE_EXTRA_BASE\""
       ;;
@@ -74,12 +73,16 @@ while getopts ":bepdsgrh" opt; do
   esac
 done
 
+# TODO: it needs to be set even when not building...
+. bin/set_compute_base.sh ${SELECTED_EXTRA_BASE:-''}
+
 args="-f docker-compose.yml ${production} ${gpu}"
 if [ "$build" = true ]; then
   echo "Building..."
   if [ "$FORCE_NO_CACHE" = true ]; then
     nocache="--no-cache"
   fi
+
   echo "docker-compose $args build $build_args $nocache"
   docker-compose $args config
   docker-compose $args build $build_args $nocache 
