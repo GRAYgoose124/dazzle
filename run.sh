@@ -1,11 +1,18 @@
 #!/bin/bash
 
-
+# check if we are in the right directory (the directory this script really exists in)
+# first get this scripts actual path then compare
+SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+if [ "$SCRIPT_PATH" != "$(pwd)" ]; then
+  echo "You must run this script from the dazzle directory"
+  exit 1
+fi
 
 while getopts ":bepdsgrh" opt; do
   case $opt in
     b)
       build=true
+      build_args=""
       ;;
     e)
       echo "copying .env.template to .env"
@@ -23,7 +30,9 @@ while getopts ":bepdsgrh" opt; do
         printf "\nhttps://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html\n\n"
         exit 1
       fi
+      . bin/set_compute_base.sh gpu
       gpu="-f gpu-compute.yml"
+      # build_args="--build-arg COMPUTE_EXTRA_BASE=\"$COMPUTE_EXTRA_BASE\""
       ;;
     d)
       echo "Running in daemon mode"
@@ -71,7 +80,9 @@ if [ "$build" = true ]; then
   if [ "$FORCE_NO_CACHE" = true ]; then
     nocache="--no-cache"
   fi
-  docker-compose $args build $nocache
+  echo "docker-compose $args build $build_args $nocache"
+  docker-compose $args config
+  docker-compose $args build $build_args $nocache 
 fi
 
 echo "Starting..."

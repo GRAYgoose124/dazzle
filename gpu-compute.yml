@@ -4,7 +4,7 @@ services:
   compute:
     build:
       args:
-        USE_GPU: 'true'
+       COMPUTE_EXTRA_BASE: "${COMPUTE_EXTRA_BASE}"
     deploy:
       resources:
         reservations:
