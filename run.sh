@@ -88,5 +88,10 @@ if [ "$build" = true ]; then
   docker-compose $args build $build_args $nocache 
 fi
 
+# if any failures just exit
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
 echo "Starting..."
 docker-compose $args up $daemon
