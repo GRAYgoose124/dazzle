@@ -2,9 +2,6 @@ version: '3.9'
 
 services:
   compute:
-    build:
-      args:
-       COMPUTE_EXTRA_BASE: "${COMPUTE_EXTRA_BASE}"
     deploy:
       resources:
         reservations:

@@ -30,7 +30,7 @@ while getopts ":bepdsgrh" opt; do
         printf "\nhttps://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html\n\n"
         exit 1
       fi
-      . bin/set_compute_base.sh gpu
+      . bin/set_compute_base.sh cuda
       gpu="-f gpu-compute.yml"
       # build_args="--build-arg COMPUTE_EXTRA_BASE=\"$COMPUTE_EXTRA_BASE\""
       ;;
