@@ -144,7 +144,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("0.0.0.0", 6379)],
+            "hosts": [("redis", 6379)],
         },
     },
 }
@@ -159,6 +159,11 @@ LOGGING = {
         },
     },
     "loggers": {
+        "": {
+            "handlers": ["console"],
+            "level": "DEBUG" if DEBUG else "INFO",
+            "propagate": True,
+        },
         "dazzlesite": {
             "handlers": ["console"],
             "level": "DEBUG" if DEBUG else "INFO",
