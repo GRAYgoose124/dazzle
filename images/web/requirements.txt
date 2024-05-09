@@ -1,4 +1,3 @@
-dizzy @ file:///dizzy
 django>=4.1.7
 uvicorn>=0.20.0
 gunicorn>=20.1.0

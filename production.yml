@@ -10,3 +10,8 @@ services:
     - DIZZY_LOG_LEVEL='INFO'
     - N_WEBWORKERS=4
     command: gunicorn --config python:dazzlesite.gunicorn dazzlesite.asgi:application -k uvicorn.workers.UvicornWorker -b $DJANGO_PRIMARY_HOST:8000
+  dizzy_base:
+    build:
+      context: .
+      dockerfile: ./images/Dockerfile.dizzy_prod
+    env_file: .env

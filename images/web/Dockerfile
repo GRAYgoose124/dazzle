@@ -1,7 +1,6 @@
 # Base image
-FROM python:3.10
+FROM dazzle_dizzy_base AS web 
 
-COPY ./dizzy /dizzy
 WORKDIR /app
 COPY ./images/web/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt

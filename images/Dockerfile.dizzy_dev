@@ -1,0 +1,5 @@
+
+FROM python:3.10 AS base
+
+COPY ./dizzy /dizzy
+RUN pip install --no-cache-dir /dizzy
