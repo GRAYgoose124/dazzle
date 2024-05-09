@@ -1,1 +1,1 @@
-dizzy @ git+https://github.com/GRAYgoose124/dizzy
+dizzy @ file:///dizzy

@@ -2,3 +2,4 @@
 *.sqlite3
 **/data/static
 .env
+dump.rdb

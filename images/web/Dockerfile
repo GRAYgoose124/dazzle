@@ -1,8 +1,9 @@
 # Base image
 FROM python:3.10
-WORKDIR /app
 
-COPY ./requirements.txt .
+COPY ./dizzy /dizzy
+WORKDIR /app
+COPY ./images/web/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # In production we want to remove the volumes and instead:

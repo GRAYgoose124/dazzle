@@ -11,7 +11,8 @@ services:
 
   web:
     build:
-      context: ./images/web
+      context: .
+      dockerfile: ./images/web/Dockerfile
     env_file: .env
     volumes:
       - './images/web/app:/app:ro' # Should be dev only (and maybe move django db to data)
@@ -24,7 +25,8 @@ services:
 
   compute:
     build:
-      context: ./images/compute
+      context: .
+      dockerfile: ./images/compute/Dockerfile
       args:
         COMPUTE_EXTRA_BASE: "${COMPUTE_EXTRA_BASE}"
     env_file: .env
