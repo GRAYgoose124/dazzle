@@ -6,10 +6,11 @@ import asyncio
 from dizzy.daemon import Server
 from dizzy.utils import load_dizzy_proto_class
 
-logging.basicConfig(level=getattr(logging, os.getenv("DIZZY_LOG_LEVEL", "INFO")), filename="/app/dizzy_server.log")
+logging.basicConfig(level=getattr(logging, os.getenv("DIZZY_LOG_LEVEL", "INFO")), filename="/data/dizzy_server.log")
 
 
-DizzyProtocol = load_dizzy_proto_class()
+if __name__ == "__main__":
+    DizzyProtocol = load_dizzy_proto_class()
 
-server = Server(DizzyProtocol, port=os.getenv("DIZZY_COMPUTE_PORT"))
-asyncio.run(server.run())
+    server = Server(DizzyProtocol, port=os.getenv("DIZZY_COMPUTE_PORT"))
+    asyncio.run(server.run())

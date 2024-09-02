@@ -1,0 +1,4 @@
+
+FROM python:3.12 AS base
+
+RUN pip install --no-cache-dir git+https://github.com/GRAYgoose124/dazzle.git@main#egg=dizzy

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-COMPUTE_EXTRA_BASE="python:3.10"
+
+# Note: Needs to be in sync with compute base atm. This is an issue.
+COMPUTE_EXTRA_BASE="python:3.12"
 if [ "$1" == "cuda" ]; then
     COMPUTE_EXTRA_BASE="nvidia/cuda:12.2.2-cudnn8-runtime-ubuntu22.04"
 elif [ "$1" == "pytorch" ]; then

@@ -13,5 +13,5 @@ services:
   dizzy_base:
     build:
       context: .
-      dockerfile: ./images/Dockerfile.dizzy_prod
+      dockerfile: ./images/dizzy_base/Dockerfile.dizzy_prod
     env_file: .env

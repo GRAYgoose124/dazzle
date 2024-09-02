@@ -1,4 +1,4 @@
 [submodule "dizzy"]
-	path = dizzy
+	path = images/dizzy_base/dizzy
 	url = https://github.com/GRAYgoose124/dizzy
-	branch = mainE
+	branch = main

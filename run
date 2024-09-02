@@ -88,7 +88,7 @@ done
 args="-f docker-compose.yml ${production} ${gpu}"
 if [ "$build" = true ]; then
   echo "Building..."
-  if [ "$FORCE_NO_CACHE" = true ]; then
+  if [ $FORCE_NO_CACHE ]; then
     nocache="--no-cache"
   fi
 

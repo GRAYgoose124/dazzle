@@ -1,0 +1,6 @@
+
+FROM python:3.12 AS base
+
+COPY ./dizzy /dizzy
+RUN pip install --no-cache-dir /dizzy
+# RUN rm -rf /dizzy

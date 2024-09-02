@@ -59,7 +59,7 @@ services:
   dizzy_base:
     build:
       context: .
-      dockerfile: ./images/Dockerfile.dizzy_dev
+      dockerfile: ./images/dizzy_base/Dockerfile.dizzy_dev
     env_file: .env
 
 

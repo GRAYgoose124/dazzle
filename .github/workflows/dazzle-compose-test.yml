@@ -14,7 +14,7 @@ jobs:
           git submodule update --init --recursive
 
       - name: Build the stack
-        run: bash ./run.sh -d -e
+        run: bash ./run -d -e
       - name: Test
         run: |
           curl -s "localhost:8000/dizzy/?entity=einz&workflow=einzy" | sed "s/'/\"/g" | jq -e

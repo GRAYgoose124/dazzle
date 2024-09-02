@@ -12,4 +12,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 ENV DJANGO_SETTINGS_MODULE=dazzlesite.settings
 
 #CMD ["gunicorn", "dazzlesite.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"]
+
+# I kinda don't want to use the shared volume here, but it's convenient for now
+# Note: We can give the web only the protocol.py.
+ENV DIZZY_DATA_ROOT="/data/shared/.dizzy"
 CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]

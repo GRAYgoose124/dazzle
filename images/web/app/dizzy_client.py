@@ -7,7 +7,7 @@ import logging
 from dizzy.daemon.client.asy import SimpleAsyncClient
 from dizzy.utils import load_dizzy_proto_class
 
-logging.basicConfig(level=getattr(logging, os.getenv("DIZZY_LOG_LEVEL", "INFO")), filename="/app/dizzy_client.log")
+logging.basicConfig(level=getattr(logging, os.getenv("DIZZY_LOG_LEVEL", "INFO")), filename="/data/dizzy_client.log")
 
 DizzyProtocol = load_dizzy_proto_class()
 

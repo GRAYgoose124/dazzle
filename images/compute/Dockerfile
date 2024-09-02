@@ -1,6 +1,5 @@
 ARG COMPUTE_EXTRA_BASE
 FROM $COMPUTE_EXTRA_BASE AS builder
-
 FROM dazzle_dizzy_base as compute
 
 COPY --from=builder / /
@@ -13,7 +12,7 @@ COPY ./dizzy /dizzy
 WORKDIR /app
 COPY ./images/compute/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+RUN rm requirements.txt
 
-ENV DIZZY_DATA_ROOT="/data/.dizzy"
-
+ENV DIZZY_DATA_ROOT="/data/shared/.dizzy"
 CMD [ "python", "dizzy_server.py"]
