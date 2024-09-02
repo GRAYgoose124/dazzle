@@ -2,7 +2,11 @@ import os
 from pathlib import Path
 
 from dizzy import Task
-from dizzy.daemon.settings import data_root
+from dizzy.daemon.settings import SettingsManager
+
+SM = SettingsManager()
+
+data_root = SM.settings.data_root
 
 
 class ReadProjectFile(Task):

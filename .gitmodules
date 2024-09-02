@@ -1,3 +1,4 @@
 [submodule "dizzy"]
 	path = dizzy
 	url = https://github.com/GRAYgoose124/dizzy
+	branch = mainE

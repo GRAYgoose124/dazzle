@@ -1,19 +1,27 @@
 version: '3.9'
 
 services:
+  proxy:
+    build:
+      context: ./images/proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "4242:4242"
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - compute
+      - web
+    
   redis:
     image: "redis:alpine"  # You can specify another version if needed
     restart: always
     volumes:
       - './images/web/data/redis:/data'
     networks:
-      - rpc-net
-
-  dizzy_base:
-    build:
-      context: .
-      dockerfile: ./images/Dockerfile.dizzy_dev
-    env_file: .env
+      - backend
 
   web:
     build:
@@ -28,9 +36,7 @@ services:
       - './images/web/data:/data'
       - './shared_data:/data/shared'
     networks:
-      - rpc-net
-    ports:
-      - 80:8000
+      - backend
 
   compute:
     build:
@@ -38,6 +44,7 @@ services:
       dockerfile: ./images/compute/Dockerfile
       args:
         COMPUTE_EXTRA_BASE: "${COMPUTE_EXTRA_BASE}"
+    restart: always
     env_file: .env
     depends_on:
       - dizzy_base
@@ -47,10 +54,15 @@ services:
       - './images/compute/data:/data'
       - './shared_data:/data/shared'
     networks:
-      - rpc-net
-  
+      - backend
+
+  dizzy_base:
+    build:
+      context: .
+      dockerfile: ./images/Dockerfile.dizzy_dev
+    env_file: .env
 
 
 networks:
-  rpc-net:
-    driver: bridge
+  frontend:
+  backend: 

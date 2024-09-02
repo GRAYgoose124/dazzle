@@ -1,0 +1,6 @@
+entity:
+  name: test
+  description: Test Entity
+  services: ["test"]
+  workflows:
+    test: "TestA -> TestB"

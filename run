@@ -2,10 +2,19 @@
 
 # check if we are in the right directory (the directory this script really exists in)
 SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-if [ "$SCRIPT_PATH" != "$(pwd)" ]; then
-  echo "You must run this script from the dazzle directory: $SCRIPT_PATH"
-  exit 1
+CURRENT_PATH="$(pwd -P)"
+
+if [ "$SCRIPT_PATH" != "$CURRENT_PATH" ]; then
+  if [ -L "$(pwd)" ] && [ "$(readlink -f "$(pwd)")" = "$SCRIPT_PATH" ]; then
+    # Current directory is a symlink pointing to the correct location, so we're good
+    true
+  else
+    echo "You must run this script from the dazzle directory: $SCRIPT_PATH"
+    echo "Current directory: $CURRENT_PATH"
+    exit 1
+  fi
 fi
+
 
 while getopts ":bepdsgrh" opt; do
   case $opt in
@@ -94,4 +103,5 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Starting..."
+docker-compose down
 docker-compose $args up $daemon

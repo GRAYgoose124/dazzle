@@ -3,3 +3,4 @@
 **/data/static
 .env
 dump.rdb
+*.log
