@@ -8,7 +8,6 @@ RUN echo "COMPUTE_EXTRA_BASE value is: $COMPUTE_EXTRA_BASE"
 RUN bash /init_scripts/select.sh $COMPUTE_EXTRA_BASE
 RUN rm -rf /init_scripts/
 
-COPY ./dizzy /dizzy
 WORKDIR /app
 COPY ./images/compute/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
