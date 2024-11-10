@@ -1,6 +1,6 @@
 ARG COMPUTE_EXTRA_BASE
 FROM $COMPUTE_EXTRA_BASE AS builder
-FROM dazzle_dizzy_base as compute
+FROM dazzle-dizzy_base:latest as compute
 
 COPY --from=builder / /
 COPY ./images/compute/extra/init_scripts /init_scripts

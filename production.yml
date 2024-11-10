@@ -12,6 +12,5 @@ services:
     command: gunicorn --config python:dazzlesite.gunicorn dazzlesite.asgi:application -k uvicorn.workers.UvicornWorker -b $DJANGO_PRIMARY_HOST:8000
   dizzy_base:
     build:
-      context: .
       dockerfile: ./images/dizzy_base/Dockerfile.dizzy_prod
-    env_file: .env
+    #env_file: .env.prod
