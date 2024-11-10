@@ -1,5 +1,5 @@
 # Base image
-FROM localhost:5000/dazzle-dizzy_base:latest AS web 
+FROM dazzle-dizzy_base:latest AS web 
 
 WORKDIR /app
 COPY ./images/web/requirements.txt .

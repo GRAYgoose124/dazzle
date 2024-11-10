@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  # Updated to v4
+        uses: actions/checkout@v4
         with:
-          submodules: true  # Ensure submodules are checked out
-      
+          submodules: true
+
       - name: Initialize Submodules
         run: |
           git submodule sync
@@ -19,35 +19,26 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          install: true  # This ensures docker buildx is available
+          install: true
 
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+      # Build base image first
+      - name: Build dazzle
+        run: ./run -d -e
 
-      # No need for docker-compose alias as modern Ubuntu comes with docker compose v2
-      
-      - name: Build and start services
-        run: bash ./run -d -e
-        env:
-          DOCKER_BUILDKIT: 1
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          
-      - name: Wait for services to be ready
+      - name: Wait for services
         run: |
-          # Wait for the web service to be ready (adjust timeout as needed)
-          timeout 60s bash -c 'while ! curl -s http://localhost/health >/dev/null; do sleep 1; done'
-        
+          timeout 60s bash -c 'while ! curl -s http://localhost/ >/dev/null; do sleep 1; done'
+
       - name: Test
         run: |
           curl -s "localhost/dizzy/?entity=einz&workflow=einzy" | sed "s/'/\"/g" | jq -e
-        
-      - name: Docker logs on failure
+
+      - name: Logs on failure
         if: failure()
         run: |
+          echo "Docker images:"
+          docker images
+          echo "Docker compose ps:"
           docker compose ps
+          echo "Docker compose logs:"
           docker compose logs

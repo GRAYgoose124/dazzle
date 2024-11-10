@@ -1,32 +1,23 @@
 version: '3.9'
 services:
-  # Local registry to store our images
-  registry:
-    image: registry:2
-    ports:
-      - "5000:5000"
-    networks:
-      - backend
-
   dizzy_base:
-    image: localhost:5000/dazzle-dizzy_base:latest
     build:
       context: .
       dockerfile: ./images/dizzy_base/Dockerfile.dizzy_dev
+    image: dazzle-dizzy_base
     env_file: .env
     networks:
       - backend
 
   web:
-    image: localhost:5000/dazzle-web:latest
     build:
       context: .
       dockerfile: ./images/web/Dockerfile
+    image: dazzle-web
     env_file: .env
     depends_on:
       - dizzy_base
       - redis
-      - registry
     volumes:
       - './images/web/app:/app:ro'
       - './images/web/data:/data'
@@ -35,18 +26,17 @@ services:
       - backend
 
   compute:
-    image: localhost:5000/dazzle-compute:latest
     build:
       context: .
       dockerfile: ./images/compute/Dockerfile
       args:
-        COMPUTE_EXTRA_BASE: "${COMPUTE_EXTRA_BASE:-}"
+        COMPUTE_EXTRA_BASE: "${COMPUTE_EXTRA_BASE:-python:3.12}"
+    image: dazzle-compute
     restart: always
     env_file: .env
     depends_on:
       - dizzy_base
       - redis
-      - registry
     volumes:
       - './images/compute/app:/app:ro'
       - './images/compute/data:/data'

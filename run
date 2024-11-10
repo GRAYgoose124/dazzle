@@ -1,136 +1,165 @@
 #!/bin/bash
-
 if [ -n "$DEBUG" ]; then
-  set -x
+    set -x
 fi
 
 # cp .env.template .env if it doesn't exist
 if [ ! -f .env ]; then
-  cp .env.template .env
+    cp .env.template .env
 fi
 
 # init git submodules if they are not already
 if [ ! -d "images/dizzy_base/dizzy/.git" ]; then
-  git submodule update --init --recursive
+    git submodule update --init --recursive
 fi
 
 if [ ! -d "proxy/logs" ]; then
-  mkdir -p proxy/logs
+    mkdir -p proxy/logs
 fi
 
 # check if we are in the right directory (the directory this script really exists in)
 SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 CURRENT_PATH="$(pwd -P)"
-
 if [ "$SCRIPT_PATH" != "$CURRENT_PATH" ]; then
-  if [ -L "$(pwd)" ] && [ "$(readlink -f "$(pwd)")" = "$SCRIPT_PATH" ]; then
-    # Current directory is a symlink pointing to the correct location, so we're good
-    true
-  else
-    echo "You must run this script from the dazzle directory: $SCRIPT_PATH"
-    echo "Current directory: $CURRENT_PATH"
-    exit 1
-  fi
+    if [ -L "$(pwd)" ] && [ "$(readlink -f "$(pwd)")" = "$SCRIPT_PATH" ]; then
+        # Current directory is a symlink pointing to the correct location, so we're good
+        true
+    else
+        echo "You must run this script from the dazzle directory: $SCRIPT_PATH"
+        echo "Current directory: $CURRENT_PATH"
+        exit 1
+    fi
 fi
 
+# If we're in GitHub Actions, build base image explicitly first
+if [ -n "$GITHUB_ACTIONS" ]; then
+    echo "Running in GitHub Actions environment"
+    echo "Building base image explicitly..."
+    cp .env.template .env
+    docker build -t dazzle-dizzy_base:latest -f ./images/dizzy_base/Dockerfile.dizzy_dev .
+    if [ $? -ne 0 ]; then
+        echo "Failed to build base image"
+        exit 1
+    fi
+    echo "Base image built successfully:"
+    docker images | grep dazzle-dizzy_base
+fi
 
 while getopts ":bepds:grh" opt; do
-  case $opt in
-    b)
-      build=true
-      build_args=""
-      ;;
-    e)
-      echo "copying .env.template to .env"
-      cp .env.template .env
-      ;;
-    p)
-      echo "Running in production mode"
-      production="-f production.yml"
-      ;;
-    g)
-      echo "Running with GPU"
-      # install nvidia-container-toolkit if it is not installed
-      if ! dpkg -s nvidia-container-toolkit >/dev/null 2>&1; then
-        echo "You need to install nvidia-container-toolkit to use GPU:"
-        printf "\nhttps://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html\n\n"
-        exit 1
-      fi
-      SELECTED_EXTRA_BASE=${SELECTED_EXTRA_BASE:-cuda}
-      gpu="-f gpu-compute.yml"
-      # build_args="--build-arg COMPUTE_EXTRA_BASE=\"$COMPUTE_EXTRA_BASE\""
-      ;;
-    d)
-      echo "Running in daemon mode"
-      daemon="-d"
-      ;;
-    s)
-      # if arg then stop specific container
-      case "$OPTARG" in
-        web)
-          echo "Stopping web container"
-          docker compose stop web
-          exit 0
-          ;;
-        proxy)
-          echo "Stopping proxy container" 
-          docker compose stop proxy
-          exit 0
-          ;;
-        compute)
-          echo "Stopping compute container"
-          docker compose stop compute
-          exit 0
-          ;;
-        *)
-          echo "Stopping all containers"
-          docker compose down
-          exit 0
-          ;;
-      esac
-      ;;
-    r)
-      echo "Removing containers"
-      docker compose down
-      docker compose rm
-      exit 0
-      ;;
-    h)
-      echo "Usage: run.sh [-b] [-p] [-d] [-s] [-r] [-h]"
-      echo "  -b        build the application"
-      echo "  -p        run in production mode"
-      echo "  -g        run with GPU compute"
-      echo "  -e        copy .env.template to .env"
-      echo "  -d        run in daemon mode"
-      echo "  -s [web]  stop dazzle (or just the web container)"
-      echo "  -r        remove the application"
-      echo "  -h        display this help message"
-      exit 0
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG, use -h" >&2
-      ;;
-  esac
+    case $opt in
+        b)
+            build=true
+            build_args=""
+            ;;
+        e)
+            echo "copying .env.template to .env"
+            cp .env.template .env
+            ;;
+        p)
+            echo "Running in production mode"
+            production="-f production.yml"
+            ;;
+        g)
+            echo "Running with GPU"
+            # install nvidia-container-toolkit if it is not installed
+            if ! dpkg -s nvidia-container-toolkit >/dev/null 2>&1; then
+                echo "You need to install nvidia-container-toolkit to use GPU:"
+                printf "\nhttps://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html\n\n"
+                exit 1
+            fi
+            SELECTED_EXTRA_BASE=${SELECTED_EXTRA_BASE:-cuda}
+            gpu="-f gpu-compute.yml"
+            # build_args="--build-arg COMPUTE_EXTRA_BASE=\"$COMPUTE_EXTRA_BASE\""
+            ;;
+        d)
+            echo "Running in daemon mode"
+            daemon="-d"
+            ;;
+        s)
+            # if arg then stop specific container
+            case "$OPTARG" in
+                web)
+                    echo "Stopping web container"
+                    docker compose stop web
+                    exit 0
+                    ;;
+                proxy)
+                    echo "Stopping proxy container"
+                    docker compose stop proxy
+                    exit 0
+                    ;;
+                compute)
+                    echo "Stopping compute container"
+                    docker compose stop compute
+                    exit 0
+                    ;;
+                *)
+                    echo "Stopping all containers"
+                    docker compose down
+                    exit 0
+                    ;;
+            esac
+            ;;
+        r)
+            echo "Removing containers"
+            docker compose down
+            docker compose rm
+            exit 0
+            ;;
+        h)
+            echo "Usage: run.sh [-b] [-p] [-d] [-s] [-r] [-h]"
+            echo " -b build the application"
+            echo " -p run in production mode"
+            echo " -g run with GPU compute"
+            echo " -e copy .env.template to .env"
+            echo " -d run in daemon mode"
+            echo " -s [web] stop dazzle (or just the web container)"
+            echo " -r remove the application"
+            echo " -h display this help message"
+            exit 0
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG, use -h" >&2
+            ;;
+    esac
 done
 
 # TODO: it needs to be set even when not building...
 . bin/set_compute_base.sh ${SELECTED_EXTRA_BASE:-''}
-
 args="-f docker-compose.yml ${production} ${gpu}"
-if [ "$build" = true ]; then
-  echo "Building..."
-  if [ $FORCE_NO_CACHE ]; then
-    nocache="--no-cache"
-  fi
 
-  echo "docker compose $args build $build_args $nocache"
-  docker compose $args config
-  docker compose $args build $build_args $nocache 
+if [ "$build" = true ]; then
+    echo "Building..."
+    if [ $FORCE_NO_CACHE ]; then
+        nocache="--no-cache"
+    fi
+    
+    if [ -n "$GITHUB_ACTIONS" ]; then
+        # In GitHub Actions, show what images we have before building
+        echo "Available images before build:"
+        docker images
+    fi
+    
+    echo "docker compose $args build $build_args $nocache"
+    docker compose $args config
+    docker compose $args build $build_args $nocache
+    
+    if [ -n "$GITHUB_ACTIONS" ]; then
+        # In GitHub Actions, show what images we have after building
+        echo "Available images after build:"
+        docker images
+    fi
 fi
 
 # if any failures just exit
 if [ $? -ne 0 ]; then
-  exit 1
+    if [ -n "$GITHUB_ACTIONS" ]; then
+        echo "Build failed. Current images:"
+        docker images
+        echo "Docker compose config:"
+        docker compose $args config
+    fi
+    exit 1
 fi
 
 echo "Starting..."
