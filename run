@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ -n "$DEBUG" ]; then
+  set -x
+fi
+
 # cp .env.template .env if it doesn't exist
 if [ ! -f .env ]; then
   cp .env.template .env
@@ -65,30 +69,30 @@ while getopts ":bepds:grh" opt; do
       case "$OPTARG" in
         web)
           echo "Stopping web container"
-          docker-compose stop web
+          docker compose stop web
           exit 0
           ;;
         proxy)
           echo "Stopping proxy container" 
-          docker-compose stop proxy
+          docker compose stop proxy
           exit 0
           ;;
         compute)
           echo "Stopping compute container"
-          docker-compose stop compute
+          docker compose stop compute
           exit 0
           ;;
         *)
           echo "Stopping all containers"
-          docker-compose down
+          docker compose down
           exit 0
           ;;
       esac
       ;;
     r)
       echo "Removing containers"
-      docker-compose down
-      docker-compose rm
+      docker compose down
+      docker compose rm
       exit 0
       ;;
     h)
@@ -119,9 +123,9 @@ if [ "$build" = true ]; then
     nocache="--no-cache"
   fi
 
-  echo "docker-compose $args build $build_args $nocache"
-  docker-compose $args config
-  docker-compose $args build $build_args $nocache 
+  echo "docker compose $args build $build_args $nocache"
+  docker compose $args config
+  docker compose $args build $build_args $nocache 
 fi
 
 # if any failures just exit
@@ -130,5 +134,5 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Starting..."
-docker-compose down
-docker-compose $args up $daemon
+docker compose down
+docker compose $args up $daemon

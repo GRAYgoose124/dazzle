@@ -13,8 +13,13 @@ jobs:
           git submodule sync
           git submodule update --init --recursive
 
+      - name: alias docker-compose to docker compose
+        run: |
+          alias docker-compose='docker compose'
+
       - name: Build the stack
         run: bash ./run -d -e
+
       - name: Test
         run: |
           curl -s "localhost/dizzy/?entity=einz&workflow=einzy" | sed "s/'/\"/g" | jq -e
