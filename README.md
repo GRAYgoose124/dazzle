@@ -10,6 +10,9 @@ S/N: Dizzy itself is very incomplete. [Zmqer](https://github.com/GRAYgoose124/zm
 
 ## Install and Run
 ```bash
+    # Init git submodules
+    git submodule update --init --recursive
+    
     # If you want to access it from anything other than localhost, set the primary host in:
     cp .env.template .env
 
@@ -33,7 +36,7 @@ Or, to browse the website, simply:
 Check images/compute/data/.dizzy for project-specific dizzy files.
 
 ### Production
-    Set DJDANGO_PRIMARY_HOST
+    Set DJANGO_PRIMARY_HOST
 
     DJANGO_SECRET_KEY=YOURSECRETKEY ./run -p
 

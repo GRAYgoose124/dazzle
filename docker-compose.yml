@@ -34,7 +34,7 @@ services:
     volumes:
       - './images/web/app:/app:ro' # Should be dev only (and maybe move django db to data)
       - './images/web/data:/data'
-      - './shared_data:/data/shared'
+      - './shared:/data/shared'
     networks:
       - backend
 
@@ -52,7 +52,7 @@ services:
     volumes:
       - './images/compute/app:/app:ro' # Should be dev only
       - './images/compute/data:/data'
-      - './shared_data:/data/shared'
+      - './shared:/data/shared'
     networks:
       - backend
 

@@ -5,9 +5,9 @@ version: '3.9'
 services:
   web:
     environment:
-    - WEB_PRODUCTION='True'
-    - DJANGO_SECRET_KEY='${DJANGO_SECRET_KEY}' 
-    - DIZZY_LOG_LEVEL='INFO'
+    - WEB_PRODUCTION=True
+    - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY} 
+    - DIZZY_LOG_LEVEL=INFO
     - N_WEBWORKERS=4
     command: gunicorn --config python:dazzlesite.gunicorn dazzlesite.asgi:application -k uvicorn.workers.UvicornWorker -b $DJANGO_PRIMARY_HOST:8000
   dizzy_base:

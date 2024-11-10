@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# cp .env.template .env if it doesn't exist
+if [ ! -f .env ]; then
+  cp .env.template .env
+fi
+
+# init git submodules if they are not already
+if [ ! -d "images/dizzy_base/dizzy/.git" ]; then
+  git submodule update --init --recursive
+fi
+
 # check if we are in the right directory (the directory this script really exists in)
 SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 CURRENT_PATH="$(pwd -P)"
