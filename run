@@ -10,6 +10,10 @@ if [ ! -d "images/dizzy_base/dizzy/.git" ]; then
   git submodule update --init --recursive
 fi
 
+if [ ! -d "proxy/logs" ]; then
+  mkdir -p proxy/logs
+fi
+
 # check if we are in the right directory (the directory this script really exists in)
 SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 CURRENT_PATH="$(pwd -P)"
@@ -26,7 +30,7 @@ if [ "$SCRIPT_PATH" != "$CURRENT_PATH" ]; then
 fi
 
 
-while getopts ":bepdsgrh" opt; do
+while getopts ":bepds:grh" opt; do
   case $opt in
     b)
       build=true
@@ -57,16 +61,29 @@ while getopts ":bepdsgrh" opt; do
       daemon="-d"
       ;;
     s)
-      # if arg then stop only web container
-      if [ "$OPTARG" = "web" ]; then
-        echo "Stopping web container"
-        docker-compose stop web
-        exit 0
-      else
-        echo "Stopping containers"
-        docker-compose down
-        exit 0
-      fi
+      # if arg then stop specific container
+      case "$OPTARG" in
+        web)
+          echo "Stopping web container"
+          docker-compose stop web
+          exit 0
+          ;;
+        proxy)
+          echo "Stopping proxy container" 
+          docker-compose stop proxy
+          exit 0
+          ;;
+        compute)
+          echo "Stopping compute container"
+          docker-compose stop compute
+          exit 0
+          ;;
+        *)
+          echo "Stopping all containers"
+          docker-compose down
+          exit 0
+          ;;
+      esac
       ;;
     r)
       echo "Removing containers"

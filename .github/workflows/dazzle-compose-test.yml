@@ -17,4 +17,4 @@ jobs:
         run: bash ./run -d -e
       - name: Test
         run: |
-          curl -s "localhost:8000/dizzy/?entity=einz&workflow=einzy" | sed "s/'/\"/g" | jq -e
+          curl -s "localhost/dizzy/?entity=einz&workflow=einzy" | sed "s/'/\"/g" | jq -e
