@@ -1,5 +1,59 @@
 version: '3.9'
 services:
+  # Local registry to store our images
+  registry:
+    image: registry:2
+    ports:
+      - "5000:5000"
+    networks:
+      - backend
+
+  dizzy_base:
+    image: localhost:5000/dazzle-dizzy_base:latest
+    build:
+      context: .
+      dockerfile: ./images/dizzy_base/Dockerfile.dizzy_dev
+    env_file: .env
+    networks:
+      - backend
+
+  web:
+    image: localhost:5000/dazzle-web:latest
+    build:
+      context: .
+      dockerfile: ./images/web/Dockerfile
+    env_file: .env
+    depends_on:
+      - dizzy_base
+      - redis
+      - registry
+    volumes:
+      - './images/web/app:/app:ro'
+      - './images/web/data:/data'
+      - './shared:/data/shared'
+    networks:
+      - backend
+
+  compute:
+    image: localhost:5000/dazzle-compute:latest
+    build:
+      context: .
+      dockerfile: ./images/compute/Dockerfile
+      args:
+        COMPUTE_EXTRA_BASE: "${COMPUTE_EXTRA_BASE:-}"
+    restart: always
+    env_file: .env
+    depends_on:
+      - dizzy_base
+      - redis
+      - registry
+    volumes:
+      - './images/compute/app:/app:ro'
+      - './images/compute/data:/data'
+      - './shared:/data/shared'
+    networks:
+      - backend
+
   proxy:
     build:
       context: ./images/proxy
@@ -23,57 +77,8 @@ services:
     networks:
       - backend
 
-  dizzy_base:
-    image: dazzle-dizzy_base:latest
-    build:
-      context: .
-      dockerfile: ./images/dizzy_base/Dockerfile.dizzy_dev
-    env_file: .env
-    networks:
-      - backend
-
-  web:
-    image: dazzle-web:latest
-    build:
-      context: .
-      dockerfile: ./images/web/Dockerfile
-    env_file: .env
-    depends_on:
-      dizzy_base:
-        condition: service_completed_successfully
-      redis:
-        condition: service_started
-    volumes:
-      - './images/web/app:/app:ro'  # Should be dev only (and maybe move django db to data)
-      - './images/web/data:/data'
-      - './shared:/data/shared'
-    networks:
-      - backend
-
-  compute:
-    image: dazzle-compute:latest
-    build:
-      context: .
-      dockerfile: ./images/compute/Dockerfile
-      args:
-        COMPUTE_EXTRA_BASE: "${COMPUTE_EXTRA_BASE:-}"
-    restart: always
-    env_file: .env
-    depends_on:
-      dizzy_base:
-        condition: service_completed_successfully
-      redis:
-        condition: service_started
-    volumes:
-      - './images/compute/app:/app:ro'  # Should be dev only
-      - './images/compute/data:/data'
-      - './shared:/data/shared'
-    networks:
-      - backend
-
 networks:
   frontend:
-    #external: true
     driver: bridge
   backend:
     internal: true
